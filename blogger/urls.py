@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from boards.views import home, about, board_topics
+from boards.views import home, about, board_topics, new_topic
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -27,5 +27,6 @@ urlpatterns = [
     # url(r'^about/author/erica/$', about_erica, name='about_erica'),
     # url(r'^privacy/$', privacy_policy, name='privacy_policy'),
     url(r'^boards/(?P<pk>\d+)/$', board_topics, name='board_topics'),
+    url(r'^boards/(?P<pk>\d+)/new/$', new_topic, name='new_topic'),
     url(r'^admin/', admin.site.urls),
 ]

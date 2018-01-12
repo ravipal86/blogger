@@ -4,6 +4,7 @@ from django.urls import resolve
 from django.test import TestCase
 from boards.views import home, board_topics, new_topic
 from boards.models import Board, Topic, Post
+from boards.forms import NewTopicForm
 
 
 class HomeTest(TestCase):
@@ -111,7 +112,9 @@ class NewTopicTest(TestCase):
     def test_new_topic_invalid_post_data(self):
         url = reverse('new_topic', kwargs={'pk': 1})
         response = self.client.post(url, {})
+        form = response.context.get('form')
         self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
 
     def test_new_topic_invalid_post_data_entry_fields(self):
         url = reverse('new_topic', kwargs={'pk': 1})
@@ -123,3 +126,9 @@ class NewTopicTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertFalse(Topic.objects.exists())
         self.assertFalse(Post.objects.exists())
+
+    def test_contains_form(self):
+        url =  reverse('new_topic', kwargs={'pk': 1})
+        response = self.client.get(url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, NewTopicForm)
